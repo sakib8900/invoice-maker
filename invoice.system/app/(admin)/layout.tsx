@@ -4,6 +4,7 @@ import { Header } from "./dashboard/_component/header";
 import { useTranslations } from "next-intl";
 import { Toaster } from "sonner";
 
+
 export default function AdminLayout({ children }: PropsWithChildren) {
   const t = useTranslations();
   return (

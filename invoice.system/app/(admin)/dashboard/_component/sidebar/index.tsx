@@ -29,15 +29,15 @@ export function Sidebar() {
 
       {/* Sidebar */}
       <aside className={`
-        fixed top-0 left-0 h-screen z-50 w-[220px] bg-[#1e2433] flex flex-col shrink-0
-        transition-transform duration-300
-        lg:static lg:translate-x-0 lg:z-auto
-        ${open ? "translate-x-0" : "-translate-x-full"}
-      `}>
+  fixed top-0 left-0 h-screen z-50 w-[220px] bg-[#1e2433] flex flex-col shrink-0
+  transition-transform duration-300
+  lg:relative lg:translate-x-0 lg:z-auto lg:h-auto
+  ${open ? "translate-x-0" : "-translate-x-full"}
+`}>
         {/* Logo + close button */}
         <div className="px-5 py-[18px] border-b border-white/10 flex items-center justify-between">
-          <span className="text-lg font-semibold text-white">
-            OS <span className="text-purple-700">Accounting</span>
+          <span className="text-xl font-semibold text-white">
+            OS <span className="text-indigo-500">Accounting</span>
           </span>
           <button
             onClick={() => setOpen(false)}

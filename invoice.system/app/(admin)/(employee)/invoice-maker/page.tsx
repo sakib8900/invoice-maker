@@ -13,6 +13,9 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "sonner";
+import PageLoader from '@/app/components/PageLoader';
+import { useInvoiceContext } from './_component/InvoiceContext';
+import HistorySection from './_component/HistorySection';
 
 type FormType = {
   contact: string;
@@ -35,12 +38,6 @@ type LineItem = {
   taxRate: string;
 };
 
-type HistoryEntry = {
-  id: number;
-  prefix: string;
-  message: string;
-  createdAt: Date;
-};
 
 const emptyLine = (id: number): LineItem => ({
   id,
@@ -59,9 +56,10 @@ export default function InvoicePage() {
   const [lines, setLines] = useState<LineItem[]>(
     Array.from({ length: 5 }, (_, i) => emptyLine(i + 1))
   );
+
+  const { historyEntries, addHistoryEntry } = useInvoiceContext();
   const [nextId, setNextId] = useState(6);
-  const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [form, setForm] = useState<FormType>({
     contact: "",
@@ -74,18 +72,21 @@ export default function InvoicePage() {
   });
 
 
-  const handleSave = () => {
-    // Duplicate check
+  const handleSave = async () => {
     const isDuplicate = historyEntries.some(
       (entry) => entry.message.startsWith(form.invoiceNo)
     );
 
     if (isDuplicate) {
-      toast.error("This invoice number has already been taken.", {
-        duration: 3000,
-      });
+      toast.error("This invoice number has already been taken.", { duration: 3000 });
       return;
     }
+
+    setIsSaving(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setLines((prev) =>
+      prev.filter((l) => l.item || l.description || l.qty || l.unitPrice)
+    );
 
     const now = new Date();
     const dateStr = now.toLocaleDateString("en-US", {
@@ -102,14 +103,12 @@ export default function InvoicePage() {
     const message = `${form.invoiceNo} created successfully`;
     const fullMessage = `On ${dateStr}, ${timeStr}, demo created:`;
 
-    setHistoryEntries((prev) => [
-      ...prev,
-      { id: Date.now(), message, createdAt: now, prefix: fullMessage },
-    ]);
+    addHistoryEntry({ id: Date.now(), message, createdAt: now, prefix: fullMessage });
 
     toast.success("Invoice created successfully", {
       duration: 3000,
     });
+    setIsSaving(false);
   };
 
 
@@ -136,16 +135,12 @@ export default function InvoicePage() {
   const subtotal = lines.reduce((sum, l) => {
     const qty = parseFloat(l.qty) || 0;
     const price = parseFloat(l.unitPrice) || 0;
-    // const disc = parseFloat(l.disc) || 0;
-    // return sum + qty * price * (1 - disc / 100);
     return sum + qty * price;
   }, 0);
 
   const tax = lines.reduce((sum, l) => {
     const qty = parseFloat(l.qty) || 0;
     const price = parseFloat(l.unitPrice) || 0;
-    // const disc = parseFloat(l.disc) || 0;
-    // const lineAmount = qty * price * (1 - disc / 100);
     const lineAmount = qty * price;
     const taxRate = getTaxRate(l.taxRate);
 
@@ -162,7 +157,8 @@ export default function InvoicePage() {
 
   return (
     <div>
-      <div className="rounded-md px-2 md:px-5">
+      <div className="relative rounded-md px-2 md:px-5">
+        {isSaving && <PageLoader />}
         <div className="bg-gray-100 px-3 md:px-5 py-5">
           {/* Top row - fields */}
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-3 mb-4">
@@ -415,49 +411,7 @@ export default function InvoicePage() {
         </div>
 
         {/* History */}
-        <div className="mt-7">
-          <h4 className="text-xs text-gray-900 mb-2">{t("history_notes")}</h4>
-          {historyEntries.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs text-gray-700 mb-1">
-                {historyEntries[historyEntries.length - 1].prefix}
-              </div>
-              <div className="text-xs text-black font-bold mb-2">
-                {historyEntries[historyEntries.length - 1].message}
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                <button
-                  onClick={() => setShowHistory(!showHistory)}
-                  className="border border-gray-200 rounded px-3 py-1.5 text-xs text-[#1197D6] font-bold bg-gray-100 hover:bg-gray-50"
-                >
-                  {showHistory
-                    ? t("hide_history")
-                    : `Show History (${historyEntries.length} change${historyEntries.length > 1 ? "s" : ""})`}
-                </button>
-                <button className="border border-gray-200 rounded px-3 py-1.5 text-xs text-[#1197D6] font-bold bg-gray-100 hover:bg-gray-50">
-                  {t("add_note")}
-                </button>
-              </div>
-              {showHistory && (
-                <div className="mt-2 space-y-2">
-                  {historyEntries.map((entry) => (
-                    <div key={entry.id} className="text-xs border-l-2 border-gray-200 pl-2">
-                      <div className="text-gray-400">{entry.prefix}</div>
-                      <div className="text-gray-700 font-medium">{entry.message}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          {historyEntries.length === 0 && (
-            <div className="flex">
-              <button className="border border-gray-200 rounded px-3 py-1.5 text-xs text-[#1197D6] font-bold bg-gray-100 hover:bg-gray-50">
-                {t("add_note")}
-              </button>
-            </div>
-          )}
-        </div>
+        <HistorySection />
       </div>
     </div>
   );

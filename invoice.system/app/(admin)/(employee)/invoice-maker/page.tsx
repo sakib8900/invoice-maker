@@ -16,28 +16,7 @@ import { toast } from "sonner";
 import PageLoader from '@/app/components/PageLoader';
 import { useInvoiceContext } from './_component/InvoiceContext';
 import HistorySection from './_component/HistorySection';
-
-type FormType = {
-  contact: string;
-  date: Date | null;
-  dueDate: Date | null;
-  invoiceNo: string;
-  reference: string;
-  currency: string;
-  taxType: string;
-};
-
-type LineItem = {
-  id: number;
-  item: string;
-  description: string;
-  qty: string;
-  unitPrice: string;
-  disc: string;
-  account: string;
-  taxRate: string;
-};
-
+import { FormType, LineItem } from './types/invoiceType';
 
 const emptyLine = (id: number): LineItem => ({
   id,

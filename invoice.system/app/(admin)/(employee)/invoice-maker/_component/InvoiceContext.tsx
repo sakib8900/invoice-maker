@@ -1,17 +1,6 @@
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
-
-type HistoryEntry = {
-  id: number;
-  prefix: string;
-  message: string;
-  createdAt: Date;
-};
-
-type InvoiceContextType = {
-  historyEntries: HistoryEntry[];
-  addHistoryEntry: (entry: HistoryEntry) => void;
-};
+import { HistoryEntry, InvoiceContextType } from "../types/invoiceType";
 
 const InvoiceContext = createContext<InvoiceContextType | null>(null);
 

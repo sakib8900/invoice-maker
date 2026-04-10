@@ -1,0 +1,63 @@
+{
+  "invoice_all_page_data": "<==| ALL CONTENT FOR invoice PAGE |==>",
+  "invoice": {
+    "title": "Invoice Maker",
+    "preview": "Preview",
+    "to": "To",
+    "date": "Date",
+    "due_date": "Due date",
+    "invoice_no": "Invoice #",
+    "reference": "Reference",
+    "enter_reference": "Enter reference",
+    "currency_type": {
+      "rupee": "Rupee",
+      "dollar": "Dollar",
+      "euro": "Euro"
+    },
+    "select_contact": "Select a contact",
+    "contact_selector": {
+      "customer": "Walk-in Customer",
+      "vendor": "Vendor",
+      "employee": "Employee",
+      "other": "Other"
+    },
+    "amounts_are": "Amounts are",
+    "amount_type": {
+      "tax_exclusive": "Tax Exclusive",
+      "tax_inclusive": "Tax Inclusive"
+    },
+    "col_item": "Item",
+    "col_description": "Description",
+    "col_qty": "Qty",
+    "col_unit_price": "Unit Price",
+    "col_disc": "Disc %",
+    "col_account": "Account",
+    "account_selector":{
+      "accountPayables": "Account Payables",
+      "accountReceivables": "Account Receivables",
+      "bank": "Bank",
+      "cash": "Cash",
+      "costofsales": "Cost of Sales",
+      "damageinvertory": "Damage Inventory",
+      "discountearned": "Discount Earned",
+      "discountgiven": "Discount Given",
+      "other": "Other"
+    },
+    "col_tax_rate": "Tax Rate",
+    "tax_rate_selector": {
+      "taxexempt@0%": "Tax Exempt @0%",
+      "standard@10%": "Standard @10%",
+      "gst@15%": "GST @15%"
+    },
+    "col_amount": "Amount",
+    "add_new_line": "Add a new line",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "save": "Save",
+    "approve": "Approve",
+    "history_notes": "History & Notes",
+    "add_note": "Add Note"
+  },
+  "footer": "All Rights Reserved © Omega Solution"
+}

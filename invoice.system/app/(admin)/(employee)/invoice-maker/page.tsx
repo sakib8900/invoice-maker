@@ -71,6 +71,18 @@ export default function InvoicePage() {
     taxType: "Tax Exclusive",
   });
 
+  const accountOptions = [
+    "accountPayables",
+    "accountReceivables",
+    "bank",
+    "cash",
+    "costofsales",
+    "damageinvertory",
+    "discountearned",
+    "discountgiven",
+    "other",
+  ];
+
 
   const handleSave = async () => {
     const isDuplicate = historyEntries.some(
@@ -313,15 +325,11 @@ export default function InvoicePage() {
                               className="w-full bg-transparent border-none outline-none px-1 py-1 focus:bg-blue-50 rounded text-gray-700 cursor-pointer appearance-none"
                             >
                               <option value=""></option>
-                              <option value="accountPayables">{t("account_selector.accountPayables")}</option>
-                              <option value="accountReceivables">{t("account_selector.accountReceivables")}</option>
-                              <option value="bank">{t("account_selector.bank")}</option>
-                              <option value="cash">{t("account_selector.cash")}</option>
-                              <option value="costofsales">{t("account_selector.costofsales")}</option>
-                              <option value="damageinvertory">{t("account_selector.damageinvertory")}</option>
-                              <option value="discountearned">{t("account_selector.discountearned")}</option>
-                              <option value="discountgiven">{t("account_selector.discountgiven")}</option>
-                              <option value="other">{t("account_selector.other")}</option>
+                              {accountOptions.map((key) => (
+                                <option key={key} value={key}>
+                                  {t(`account_selector.${key}`)}
+                                </option>
+                              ))}
                             </select>
                           ) : field === "taxRate" ? (
                             <select
@@ -357,30 +365,31 @@ export default function InvoicePage() {
               </tbody>
             </table>
           </div>
+          <div className="flex mt-3">
+            {/* Add New line*/}
+            <div className="flex-1 flex items-start pt-0">
+              <button
+                onClick={addLine}
+                className="flex items-center gap-1.5 border border-gray-200 rounded px-3 py-1.5 text-xs text-[#1197D6] font-bold hover:bg-gray-50"
+              >
+                <Plus className="w-3 h-3" />
+                {t("add_new_line")}
+                <ChevronDown className="w-3 h-3" />
+              </button>
+            </div>
 
-          {/* Add line button */}
-          <button
-            onClick={addLine}
-            className="mt-3 flex items-center gap-1.5 border border-gray-200 rounded px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
-          >
-            <Plus className="w-3 h-3" />
-            {t("add_new_line")}
-            <ChevronDown className="w-3 h-3" />
-          </button>
-
-          {/* Totals */}
-          <div className="flex justify-end mt-5">
-            <div className="w-full max-w-[260px] space-y-1">
-              <div className="flex justify-between text-sm text-gray-500 border-b border-gray-100 pb-1">
+            {/* Totals */}
+            <div className="w-[280px] space-y-1">
+              <div className="flex justify-between text-sm text-gray-500 pb-1">
                 <span>{t("subtotal")}</span>
                 <span>{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-sm text-gray-500 border-b border-gray-100 pb-1">
+              <div className="flex justify-between text-sm text-gray-500 pb-1">
                 <span>{t("tax")}</span>
                 <span>{tax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-lg font-semibold text-gray-800 pt-2">
-                <span>{t("total")}</span>
+              <div className="-ml-16 flex justify-between text-lg font-semibold text-gray-800 py-1.5 border-y-2 border-black">
+                <span className='ml-16'>{t("total")}</span>
                 <span>{total.toFixed(2)}</span>
               </div>
             </div>

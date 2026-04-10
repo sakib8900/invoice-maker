@@ -1,4 +1,4 @@
-// app/[locale]/layout.tsx
+// app/layout.tsx
 
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
